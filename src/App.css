@@ -1,0 +1,14 @@
+*{
+  margin: 0;
+  padding: 0;
+  /* background-color: black; */
+}
+.Container{
+  display: flexbox;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  border-color: beige;
+  background-color: rgb(220, 140, 36);
+  color: aliceblue;
+}
