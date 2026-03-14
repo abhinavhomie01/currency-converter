@@ -11,38 +11,44 @@ const [rate,setRate]=useState(null);
 
 
 useEffect(()=>{
-  axios.get("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json").then((res)=>{setCurrencies(Object.keys(res.data))});
+  axios.get("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json").then((res)=>{setCurrencies(res.data)});
 },[]);
 
 useEffect(()=>{
   axios
-  .get(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-06/v1/currencies/${fromCurrency}.json`)
+  .get(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency}.json`)
   .then((res)=>{
-    setRate(res.data[fromCurrency][toCurrency]);
-    setConverted((amount*rate).toFixed(2));
+    const newRate=res.data[fromCurrency][toCurrency];
+    setRate(newRate);
+    setConverted((amount*newRate).toFixed(2));
   })
-},[fromCurrency,toCurrency,amount]) 
+},[fromCurrency,toCurrency]) 
   return (
     <div className="Container">
       <div className="row">
       <h1>Currency Converter</h1>
       <select value={fromCurrency} onChange={(e)=>{setFromCurrency(e.target.value)}}>
-        {currencies.map((cur)=>(
-          <option key={cur} value={cur}>{cur.toUpperCase()}</option>
+        {Object.entries(currencies).filter(([code,name])=>name!=="").map(([cur,name])=>(
+          <option key={cur} value={cur}>{name}</option>
         ))}
         </select>
-      <input type="number" value={amount} onChange={(e)=>{setAmount(e.target.value)}}/>
+      <input type="number" value={amount} onChange={(e)=>{
+        const amt=Number(e.target.value);
+        setAmount(amt);
+        setConverted((amt*rate).toFixed(2));
+        }}/>
       <input type="number" value={converted} onChange={(e)=>{
-        setConverted(e.target.value);
-        setAmount(e.target.value/rate);
+        const val=Number(e.target.value);
+        setConverted(val);
+        setAmount((val/rate).toFixed(2));
       }}/>
      <select value={toCurrency} onChange={(e)=>{setToCurrency(e.target.value)}}>
-        {currencies.map((cur)=>{
-           return <option key={cur} value={cur}>{cur.toUpperCase()}</option>
-        })}
+        {Object.entries(currencies).filter(([code,name])=>name!=="").map(([cur,name])=>(
+          <option key={cur} value={cur}>{name}</option>
+        ))}
         </select>
       </div>
-      <h3>1 {fromCurrency.toUpperCase()} = {rate} {toCurrency.toUpperCase()}</h3>
+      <h3>1 {fromCurrency.toUpperCase()} = { rate ? rate.toFixed(2) : ""} {toCurrency.toUpperCase()}</h3>
       <button onClick={()=>{
         setFromCurrency(toCurrency);
         setToCurrency(fromCurrency);
