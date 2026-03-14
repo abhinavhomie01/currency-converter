@@ -21,15 +21,15 @@ useEffect(()=>{
     setRate(res.data[fromCurrency][toCurrency]);
     setConverted((amount*rate).toFixed(2));
   })
-},[fromCurrency,toCurrency,amount])
+},[fromCurrency,toCurrency,amount]) 
   return (
     <div className="Container">
       <div className="row">
       <h1>Currency Converter</h1>
       <select value={fromCurrency} onChange={(e)=>{setFromCurrency(e.target.value)}}>
-        {currencies.map((cur)=>{
-          <option key={cur} value={cur}>{cur.toUpperCase}</option>
-        })}
+        {currencies.map((cur)=>(
+          <option key={cur} value={cur}>{cur.toUpperCase()}</option>
+        ))}
         </select>
       <input type="number" value={amount} onChange={(e)=>{setAmount(e.target.value)}}/>
       <input type="number" value={converted} onChange={(e)=>{
@@ -38,11 +38,11 @@ useEffect(()=>{
       }}/>
      <select value={toCurrency} onChange={(e)=>{setToCurrency(e.target.value)}}>
         {currencies.map((cur)=>{
-          <option key={cur} value={cur}>{cur.toUpperCase}</option>
+           return <option key={cur} value={cur}>{cur.toUpperCase()}</option>
         })}
         </select>
       </div>
-      <h3>1 {fromCurrency.toUpperCase} = {rate} {toCurrency.toUpperCase}</h3>
+      <h3>1 {fromCurrency.toUpperCase()} = {rate} {toCurrency.toUpperCase()}</h3>
       <button onClick={()=>{
         setFromCurrency(toCurrency);
         setToCurrency(fromCurrency);
